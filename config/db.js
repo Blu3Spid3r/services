@@ -9,7 +9,7 @@ const config = {
   options: {
     appName: 'WCS',
     encrypt:true,
-    trustServerCertificate: true,
+    trustServerCertificate: false,
   },
 }
 
