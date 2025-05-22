@@ -8,8 +8,8 @@ const config = {
   database: process.env.DB_DATABASE,
   options: {
     appName: 'WCS',
-    encrypt: false,
-    trustServerCertificate: true,
+    encrypt: true,
+    trustServerCertificate: false,
   },
 }
 
