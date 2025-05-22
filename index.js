@@ -171,7 +171,7 @@ io.on('connection', (socket) => {
 
 
 // Conexión SQL Server
-/*const sqlConfig = {
+const sqlConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   server: process.env.DB_SERVER,
@@ -187,7 +187,7 @@ sql.connect(sqlConfig).then(() => {
   console.log('Conectado a SQL Server.')
 }).catch(err => {
   console.error('Error de conexión a SQL Server:', err)
-})*/
+})
 
 // Escuchar por HTTP + Socket.IO
 const port = process.env.PORT || 3000;

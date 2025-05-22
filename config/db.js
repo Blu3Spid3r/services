@@ -1,45 +1,29 @@
-const tunnel = require('tunnel-ssh');
-const sql = require('mssql');
+const sql = require('mssql')
+require('dotenv').config()
 
-const tunnelConfig = {
-  username: 'lt1b4fssa5p9jz',
-  password: 'p1auhylsk32nij9iexnsfso8bo',
-  host: 'us-east-static-01.quotaguard.com',
-  port: 9293,
-  dstHost: 'alesgar.database.windows.net',
-  dstPort: 1433,
-  localHost: '189.153.89.213',
-  localPort: 14330,
-  keepAlive: true
-};
-
-const dbConfig = {
-  user: 'alesgar',
-  password: '1ndU5tr135',
-  server: '189.153.89.213',
-  port: 14330,
-  database: 'WCS',
+const config = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  server: process.env.DB_SERVER,
+  database: process.env.DB_DATABASE,
   options: {
+    appName: 'WCS',
     encrypt: true,
-    trustServerCertificate: false
-  }
-};
+    trustServerCertificate: false,
+  },
+}
 
-module.exports = new Promise((resolve, reject) => {
-  tunnel(tunnelConfig, (err, server) => {
-    if (err) {
-      console.error('❌ Error al establecer el túnel:', err);
-      return reject(err);
-    }
+console.log('🧪 Configuración de conexión:', config)
 
-    sql.connect(dbConfig)
-        .then(pool => {
-          console.log('✅ Conexión establecida a Azure SQL a través de QuotaguardStatic');
-          resolve(pool);
-        })
-        .catch(sqlErr => {
-          console.error('❌ Error al conectar con SQL Server:', sqlErr);
-          reject(sqlErr);
-        });
-  });
-});
+const poolPromise = new sql.ConnectionPool(config)
+  .connect()
+  .then(pool => {
+    console.log('📦 Conectado a SQL Server')
+    return pool
+  })
+  .catch(err => console.error('Error al conectar a SQL Server', err))
+
+module.exports = {
+  sql,
+  poolPromise
+}
