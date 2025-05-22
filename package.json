@@ -1,16 +1,26 @@
 {
   "name": "services",
   "version": "1.0.0",
+  "description": "Proyecto Node.js con conexión a Azure SQL usando QuotaguardStatic",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
+
+  "engines": {
+    "node": "22.x"
+  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "tunnel": "^0.0.6",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.1",
+    "dotenv": "^16.3.1",
     "axios": "^1.8.4",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
