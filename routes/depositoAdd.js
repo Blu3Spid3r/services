@@ -5,9 +5,16 @@ const upload = multer() // puedes configurarlo más adelante si quieres guardar 
 const { sql, poolPromise } = require('../config/db')
 
 // GET /services/deposito_agregar
-router.post('/', upload.none(), async (req, res) => {
-//router.post('/', async (req, res) => {
-  const sub = req.auth?.sub
+//router.post('/', upload.none(), async (req, res) => {
+router.post('/', upload.single('Comprobante'), async (req, res) => {
+  const ArchivoComprobante = req.file
+
+  const ArchivoNombre = ArchivoComprobante?.originalname || null
+  const ArchivoContenido = ArchivoComprobante?.buffer || null
+  const ArchivoTamano = ArchivoComprobante?.size || null
+  const ArchivoMimeType = ArchivoComprobante?.mimetype || null
+  
+    const sub = req.auth?.sub
   console.log('🔐 [Agregar Deposito] Token sub:', sub)
 
   console.log(req.body);
@@ -17,15 +24,14 @@ router.post('/', upload.none(), async (req, res) => {
   const {
 	  IdDeposito
 	, IdDepositoTipo
+  , DepositoTipo
 	, Depositante
-	, ArchivoNombre
-	, ArchivoContenido
-	, ArchivoTamano
-    , ArchivoMimeType
 	, Monto
 	, IdSocioComercial
 	, ClaveRastreo
   } = req.body
+
+  console.log(req.body);
 
   try {
     const pool = await poolPromise
@@ -44,14 +50,14 @@ router.post('/', upload.none(), async (req, res) => {
     // Ejecutar el stored procedure (ejemplo: dbo.DepositoConsultaProc)
     const result = await pool.request()
       .input('UserToken', sql.UniqueIdentifier, userToken)
-      .input('IdDepositoTipo', sql.Int, IdDepositoTipo) 
-	  .input('Depositante', sql.NVarChar(200), Depositante)
-	  .input('ArchivoNombre', sql.VarChar(255), ArchivoNombre)
-	  .input('ArchivoContenido', sql.VarBinary(sql.MAX), ArchivoContenido)
-	  .input('ArchivoTamano', sql.Int, ArchivoTamanoBOL)
-	  .input('ArchivoMimeType', sql.VarChar(200), ArchivoMimeType)
-	  .input('Monto', sql.Decimal, Precio)
-	  .input('ClaveRastreo', sql.VarChar(50), Sellos)
+      .input('IdDepositoTipo', sql.Int, DepositoTipo) 
+	    .input('Depositante', sql.NVarChar(200), Depositante)
+	    .input('ArchivoNombre', sql.VarChar(255), ArchivoNombre)
+	    .input('ArchivoContenido', sql.VarBinary(sql.MAX), ArchivoContenido)
+	    .input('ArchivoTamano', sql.Int, ArchivoTamano)
+	    .input('ArchivoMimeType', sql.VarChar(200), ArchivoMimeType)
+	    .input('Monto', sql.Decimal, Monto)
+	    .input('ClaveRastreo', sql.VarChar(50), ClaveRastreo)
       .output('IdDeposito', sql.Int)
       .output('ErrorMsg', sql.VarChar(50))
       .execute('dbo.DepositoAgregarProc')

@@ -5,6 +5,7 @@ const { sql, poolPromise } = require('../config/db')
 // GET /services/tipos-cambio
 router.get('/', async (req, res) => {
   const sub = req.auth?.sub
+  const { formatearFechasEnRecordset } = require('../utils/formatearFechasEnRecordset')
   console.log('🔐 [Tipos Cambio] Token sub:', sub)
 
   if (!sub) {
