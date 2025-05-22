@@ -179,7 +179,7 @@ const sqlConfig = {
   options: {
     appName: 'WCS',
     encrypt: true,
-    trustServerCertificate: false,
+    trustServerCertificate: true,
   }
 }
 
