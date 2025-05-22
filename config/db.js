@@ -1,10 +1,6 @@
-const sql = require('mssql')
-require('dotenv').config()
-
-const config = {
-  const sql = require('mssql');
-  const tunnel = require('tunnel-ssh');
-  require('dotenv').config();
+const sql = require('mssql');
+const tunnel = require('tunnel-ssh');
+require('dotenv').config();
 
 const url = new URL(process.env.QUOTAGUARDSTATIC_URL);
 const [user, pass] = url.username ? [url.username, url.password] : url.auth.split(':');
