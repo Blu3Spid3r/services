@@ -76,14 +76,17 @@ const io = new Server(server, {
 const authMiddleware = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
+    cacheMaxEntries: 5,
+    cacheMaxAge: 10 * 60 * 1000, // 10 minutos
     rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
-  }),
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ['RS256'],
-  clockTolerance: 60 // <-- agrega esta línea (segundos de tolerancia)
+    jwksRequestsPerMinute: 10,
+    jwksUri: https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json,
+}),
+audience: process.env.AUTH0_AUDIENCE,
+    issuer: https://${process.env.AUTH0_DOMAIN}/,
+    algorithms: ['RS256'],
+        clockTolerance: 60, // <-- agrega esta línea (segundos de tolerancia)
+    handleErrors: true
 })
 
 
@@ -178,7 +181,7 @@ const sqlConfig = {
   database: process.env.DB_DATABASE,
   options: {
     appName: 'WCS',
-    encrypt: true,
+     encrypt: true,
     trustServerCertificate: false,
   }
 }
